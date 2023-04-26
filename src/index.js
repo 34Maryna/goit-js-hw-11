@@ -61,8 +61,7 @@ async function onLoadMorePosts() {
     const totalPage = Math.round(photos.totalHits / per_page);
     if (page > totalPage) {
       Notify.warning(
-        'We are sorry,but you have reached the end of search results.'
-      );
+        'We are sorry,but you have reached the end of search results.');
       refs.loadMoreBtn.classList.replace('is-active', 'is-hidden');
       return;
     }
