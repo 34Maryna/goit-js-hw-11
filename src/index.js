@@ -8,7 +8,7 @@ import { createMarkup } from './js/createmarkup.js';
 let page = 1;
 const per_page = 40;
 
-refs = {
+const refs = {
   form: document.querySelector('.search-form'),
   gallery: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
