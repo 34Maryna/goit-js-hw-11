@@ -12,7 +12,9 @@ const refs = {
   form: document.querySelector('.search-form'),
   gallery: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
-}
+};
+
+refs.loadMoreBtn.style.display = 'none';
 
 const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
@@ -24,8 +26,9 @@ refs.loadMoreBtn.addEventListener('click', onLoadMorePosts);
 
 async function onSubmit(evt) {
   evt.preventDefault();
+  refs.loadMoreBtn.style.display = 'block';
   const isActive = true;
-  if (isActive === true || refs.loadMoreBtn.classList.has('is-active')) {
+  if (isActive === true || refs.loadMoreBtn.classList.contains('is-active')) {
     refs.gallery.innerHTML = '';
     page = 1;
     refs.loadMoreBtn.classList.replace('is-active', 'is-hidden');
@@ -33,11 +36,13 @@ async function onSubmit(evt) {
   const query = evt.target.elements.searchQuery.value.trim();
   try {
     if (query === '') {
+      refs.loadMoreBtn.style.display = 'none';
       Notify.warning('No data!');
       return;
     }
     const photos = await getPhotos(query, page, per_page);
     if (photos.hits.length === 0) {
+      refs.loadMoreBtn.style.display = 'none';
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
@@ -45,7 +50,7 @@ async function onSubmit(evt) {
     }
     createMarkup(photos.hits);
     lightbox.refresh();
-    refs.loadMoreBtn.classList.replace('is-hidden', 'is-active');
+    refs.loadMoreBtn.classList.replace('is-active', 'is-hidden');
 
     Notify.success(`Hooray! We found ${photos.totalHits} images.`);
   } catch (error) {
@@ -55,7 +60,7 @@ async function onSubmit(evt) {
 
 async function onLoadMorePosts() {
   const query = refs.form.elements.searchQuery.value.trim();
-  try {
+    try {
     page += 1;
     const photos = await getPhotos(query, page, per_page);
     const totalPage = Math.round(photos.totalHits / per_page);
